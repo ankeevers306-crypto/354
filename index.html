@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>81dgital-ex - Financial Information Consultancy</title>
+    <style>
+        /* 全局配色 & 基础样式 */
+        :root {
+            --primary: #4ADE80;
+            --secondary: #A7F3D0;
+            --accent: #F472B6;
+            --bg-white: #FFFFFF;
+            --text-title: #1E293B;
+            --text-body: #64748B;
+            --page-normal: #F1F5F9;
+            --page-disabled: #E2E8F0;
+            --card-hover: rgba(74, 222, 128, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-white);
+            color: var(--text-body);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 导航栏 */
+        header {
+            background-color: var(--bg-white);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .nav-wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-title);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-item {
+            padding: 10px 18px;
+            border-radius: 6px;
+            color: var(--text-title);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background-color: var(--secondary);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        /* 移动端导航 */
+        .menu-btn {
+            display: none;
+            font-size: 26px;
+            color: var(--text-title);
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            background: var(--bg-white);
+            padding: 15px 20px;
+            gap: 10px;
+            border-top: 1px solid var(--page-normal);
+        }
+
+        .mobile-menu .nav-item {
+            text-align: center;
+        }
+
+        /* 页面区块 - 多页面切换 */
+        .page-section {
+            display: none;
+            padding: 60px 0;
+            min-height: calc(100vh - 70px);
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* 首页横幅 */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .hero-text h1 {
+            font-size: 42px;
+            color: var(--text-title);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-text p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            background-color: var(--primary);
+            color: #fff;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .hero-img img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(74,222,128,0.15);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .gallery-item {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        /* 通用板块标题 */
+        .section-title {
+            font-size: 34px;
+            color: var(--text-title);
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            margin: 12px auto 0;
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            font-size: 20px;
+            color: var(--text-title);
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* 数据统计模块 */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin: 60px 0;
+            padding: 40px 0;
+            background-color: var(--page-normal);
+            border-radius: 16px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 0 15px;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text-title);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            color: var(--text-body);
+        }
+
+        /* 关于我们 */
+        .about-content {
+            max-width: 900px;
+            margin: 0 auto;
+            font-size: 17px;
+            text-align: center;
+        }
+
+        .about-content p {
+            margin-bottom: 20px;
+        }
+
+        .about-timeline {
+            max-width: 1000px;
+            margin: 60px auto;
+            position: relative;
+        }
+
+        .about-timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background-color: var(--secondary);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            grid-column: 1;
+            text-align: right;
+            padding-right: 40px;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            grid-column: 2;
+            padding-left: 40px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .timeline-year {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-title);
+            margin-bottom: 10px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            padding: 30px 20px;
+            background: var(--secondary);
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(74,222,128,0.2);
+        }
+
+        .feature-card h3 {
+            color: var(--text-title);
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        /* 服务页面 */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .service-card {
+            padding: 30px;
+            border: 1px solid var(--page-normal);
+            border-radius: 12px;
+            transition: 0.3s;
+            background-color: var(--bg-white);
+        }
+
+        .service-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 6px 18px var(--card-hover);
+            transform: translateY(-3px);
+        }
+
+        .service-card h3 {
+            color: var(--text-title);
+            font-size: 22px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .service-card h3::before {
+            content: '✓';
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        .service-benefits {
+            max-width: 1000px;
+            margin: 0 auto 60px;
+            padding: 40px;
+            background-color: var(--page-normal);
+            border-radius: 16px;
+        }
+
+        .benefits-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .benefit-item i {
+            color: var(--primary);
+            font-size: 20px;
+            margin-top: 4px;
+        }
+
+        .client-cases {
+            margin: 60px 0;
+        }
+
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .case-card {
+            padding: 25px;
+            border-radius: 12px;
+            background-color: var(--bg-white);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .case-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .case-client {
+            font-weight: 600;
+            color: var(--text-title);
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .case-industry {
+            color: var(--primary);
+            font-size: 14px;
+            margin-bottom: 15px;
+            display: inline-block;
+            background-color: var(--secondary);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        /* 联系我们 + 表单 */
+        .contact-wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .contact-info h3 {
+            color: var(--text-title);
+            font-size: 24px;
+            margin-bottom: 25px;
+        }
+
+        .contact-info p {
+            margin-bottom: 15px;
+            font-size: 17px;
+        }
+
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .contact-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .contact-detail-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-title);
+            font-size: 18px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 18px;
+            border: 1px solid var(--page-normal);
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+        }
+
+        .contact-form textarea {
+            min-height: 140px;
+            resize: none;
+        }
+
+        .submit-btn {
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .success-msg {
+            color: #22c55e;
+            text-align: center;
+            font-weight: 500;
+            margin-top: 15px;
+            display: none;
+        }
+
+        /* FAQ 模块 */
+        .faq-section {
+            max-width: 900px;
+            margin: 60px auto 0;
+        }
+
+        .faq-item {
+            margin-bottom: 15px;
+            border: 1px solid var(--page-normal);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 18px 20px;
+            background-color: var(--page-normal);
+            font-weight: 500;
+            color: var(--text-title);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-answer.show {
+            padding: 20px;
+            max-height: 300px;
+        }
+
+        .faq-toggle {
+            color: var(--primary);
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-toggle.rotate {
+            transform: rotate(180deg);
+        }
+
+        /* 分页样式 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 60px;
+        }
+
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            background: var(--page-normal);
+            border: none;
+            color: var(--text-title);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .page-btn.active {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .page-btn:disabled {
+            background: var(--page-disabled);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* 页脚 */
+        footer {
+            background: var(--text-title);
+            color: #fff;
+            text-align: center;
+            padding: 40px 0 20px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .footer-link {
+            color: var(--secondary);
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            margin-top: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            .menu-btn {
+                display: block;
+            }
+            .mobile-menu.active {
+                display: flex;
+            }
+            .hero {
+                grid-template-columns: 1fr;
+            }
+            .hero-text h1 {
+                font-size: 32px;
+            }
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .features {
+                grid-template-columns: 1fr;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .benefits-list {
+                grid-template-columns: 1fr;
+            }
+            .cases-grid {
+                grid-template-columns: 1fr;
+            }
+            .contact-wrap {
+                grid-template-columns: 1fr;
+            }
+            .about-timeline::before {
+                left: 20px;
+            }
+            .timeline-item {
+                grid-template-columns: 1fr;
+            }
+            .timeline-item:nth-child(even) .timeline-content,
+            .timeline-item:nth-child(odd) .timeline-content {
+                grid-column: 1;
+                padding-left: 50px;
+                text-align: left;
+            }
+            .timeline-dot {
+                left: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            .service-benefits {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header>
+        <div class="container nav-wrap">
+            <div class="logo">81dgital-ex</div>
+            <ul class="nav-menu">
+                <li class="nav-item active" data-page="home">Home</li>
+                <li class="nav-item" data-page="about">About Us</li>
+                <li class="nav-item" data-page="services">Services</li>
+                <li class="nav-item" data-page="contact">Contact Us</li>
+            </ul>
+            <div class="menu-btn" id="menuBtn">☰</div>
+        </div>
+        <!-- 移动端导航 -->
+        <ul class="mobile-menu" id="mobileMenu">
+            <li class="nav-item active" data-page="home">Home</li>
+            <li class="nav-item" data-page="about">About Us</li>
+            <li class="nav-item" data-page="services">Services</li>
+            <li class="nav-item" data-page="contact">Contact Us</li>
+        </ul>
+    </header>
+
+    <!-- 首页 -->
+    <section class="page-section active" id="home">
+        <div class="container">
+            <div class="hero">
+                <div class="hero-text">
+                    <h1>Professional Financial Information Consultancy</h1>
+                    <p>81dgital-ex provides reliable, professional and comprehensive financial information consulting services for global clients. We focus on market analysis, financial planning and investment consulting to help you navigate the complex financial landscape.</p>
+                    <a href="javascript:;" class="btn nav-link" data-page="contact">Get In Touch</a>
+                </div>
+                <div class="hero-img">
+                    <img src="https://ankeevers306-crypto.github.io/354/12.jpg" alt="Financial Consulting">
+                </div>
+            </div>
+
+            <!-- 数据统计模块 -->
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">Years of Experience</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Satisfied Clients</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">20+</div>
+                    <div class="stat-label">Countries Served</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Client Retention</div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Our Business Gallery</h2>
+            <p class="section-subtitle">Explore our professional workspace and client collaborations</p>
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="https://ankeevers306-crypto.github.io/354/13.jpg" alt="Gallery Image">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://ankeevers306-crypto.github.io/354/14.jpg" alt="Gallery Image">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://ankeevers306-crypto.github.io/354/15.jpg" alt="Gallery Image">
+                </div>
+            </div>
+
+            <div class="pagination">
+                <button class="page-btn" disabled>&lt;</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">&gt;</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section class="page-section" id="about">
+        <div class="container">
+            <h2 class="section-title">About 81dgital-ex</h2>
+            <div class="about-content">
+                <p>Founded in Bradford, England, 81dgital-ex is a trusted financial information consulting firm with over 15 years of industry experience. We have a professional team with rich experience in the financial industry, committed to delivering accurate market data, professional analysis reports and personalized consulting solutions tailored to each client's unique needs.</p>
+                <p>We adhere to the principles of integrity, professionalism and efficiency, and serve individual investors, small and medium enterprises and institutional clients across multiple regions. Our global perspective combined with local market expertise allows us to provide insights that drive informed decision-making and sustainable growth.</p>
+                <p>At 81dgital-ex, we believe that financial success is built on a foundation of clear information, strategic planning, and ongoing support. Our mission is to empower our clients with the knowledge and tools they need to achieve their financial goals in an ever-changing global economy.</p>
+            </div>
+
+            <!-- 发展历程时间线 -->
+            <h3 class="section-subtitle">Our Journey</h3>
+            <div class="about-timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2008</div>
+                        <p>Founded in Bradford, UK, initially focusing on local SME financial consulting services</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2012</div>
+                        <p>Expanded services to include global market analysis and cross-border investment consulting</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2017</div>
+                        <p>Launched proprietary financial data analytics platform for real-time market insights</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2022</div>
+                        <p>Expanded to serve clients in 20+ countries with multilingual consulting teams</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="features">
+                <div class="feature-card">
+                    <h3>Professional Team</h3>
+                    <p>Senior financial experts with years of industry experience provide one-on-one professional support. Our team includes CFA charterholders, certified financial planners, and market analysts with global experience.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Accurate Data</h3>
+                    <p>Real-time global financial data and in-depth market analysis to support your decisions. We leverage advanced analytics and AI tools to deliver actionable insights and predictive market trends.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Global Service</h3>
+                    <p>Open to clients worldwide, flexible service modes and quick response. We offer 24/7 support for international clients and customized solutions for different regional markets and regulatory environments.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 服务页面 -->
+    <section class="page-section" id="services">
+        <div class="container">
+            <h2 class="section-title">Our Services</h2>
+            <p class="section-subtitle">Comprehensive financial solutions tailored to your needs</p>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>Financial Market Analysis</h3>
+                    <p>Regular market trend analysis, industry research and risk assessment reports to help you grasp market dynamics. Our analysis covers equities, fixed income, commodities, forex, and alternative investments with weekly and monthly insights reports.</p>
+                    <p style="margin-top: 10px; font-size: 14px; color: var(--text-body);">• Macro-economic analysis<br>• Sector-specific research<br>• Risk identification & mitigation<br>• Competitive landscape analysis</p>
+                </div>
+                <div class="service-card">
+                    <h3>Investment Consulting</h3>
+                    <p>Customized investment suggestions, portfolio planning and asset allocation consulting services. We develop personalized investment strategies based on your risk tolerance, time horizon, and financial goals.</p>
+                    <p style="margin-top: 10px; font-size: 14px; color: var(--text-body);">• Portfolio diversification<br>• Asset allocation optimization<br>• Investment performance review<br>• Tax-efficient investing strategies</p>
+                </div>
+                <div class="service-card">
+                    <h3>Financial Information Support</h3>
+                    <p>Collection, sorting and interpretation of global financial news, data and policy information. Our dedicated research team monitors 200+ financial sources to deliver curated, relevant information to your inbox.</p>
+                    <p style="margin-top: 10px; font-size: 14px; color: var(--text-body);">• Real-time market alerts<br>• Regulatory policy updates<br>• Financial news aggregation<br>• Custom data feeds</p>
+                </div>
+                <div class="service-card">
+                    <h3>Enterprise Financial Consulting</h3>
+                    <p>Financial management consulting, budget planning and financial optimization solutions for enterprises. We help businesses improve financial performance, reduce costs, and maximize profitability.</p>
+                    <p style="margin-top: 10px; font-size: 14px; color: var(--text-body);">• Financial planning & budgeting<br>• Cash flow management<br>• Cost optimization<br>• Financial risk management</p>
+                </div>
+            </div>
+
+            <!-- 服务优势 -->
+            <div class="service-benefits">
+                <h3 class="section-subtitle" style="text-align: left;">Why Choose Our Services?</h3>
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <i>✓</i>
+                        <div>
+                            <strong>Customized Solutions</strong>
+                            <p>No one-size-fits-all approach - we tailor our services to your specific needs and goals</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <i>✓</i>
+                        <div>
+                            <strong>Transparent Pricing</strong>
+                            <p>Clear, upfront pricing with no hidden fees or unexpected charges</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <i>✓</i>
+                        <div>
+                            <strong>Expert Insights</strong>
+                            <p>Access to exclusive research and analysis not available to the general public</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <i>✓</i>
+                        <div>
+                            <strong>Ongoing Support</strong>
+                            <p>Continuous guidance and adjustments as market conditions change</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 客户案例 -->
+            <div class="client-cases">
+                <h3 class="section-subtitle">Client Success Stories</h3>
+                <div class="cases-grid">
+                    <div class="case-card">
+                        <div class="case-client">Global Tech Startup</div>
+                        <div class="case-industry">Technology</div>
+                        <p>Helped secure $2.5M in funding through financial modeling and investor presentation preparation, resulting in 300% revenue growth within 18 months.</p>
+                    </div>
+                    <div class="case-card">
+                        <div class="case-client">Family Investment Office</div>
+                        <div class="case-industry">Wealth Management</div>
+                        <p>Restructured investment portfolio to reduce risk exposure by 40% while maintaining 8.2% annual returns through strategic asset allocation.</p>
+                    </div>
+                    <div class="case-card">
+                        <div class="case-client">Manufacturing SME</div>
+                        <div class="case-industry">Manufacturing</div>
+                        <p>Implemented financial optimization strategies that reduced operational costs by 15% and improved cash flow by $500K annually.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系我们 -->
+    <section class="page-section" id="contact">
+        <div class="container">
+            <h2 class="section-title">Contact Us</h2>
+            <p class="section-subtitle">We're here to answer your financial questions and help you succeed</p>
+            
+            <div class="contact-wrap">
+                <div class="contact-info">
+                    <h3>Company Information</h3>
+                    <p>Whether you have a question about our services, need a personalized consultation, or want to discuss your financial goals, our team is ready to assist you.</p>
+                    <p>Our Bradford office is open Monday to Friday, and we offer virtual consultations for international clients across all time zones.</p>
+                    
+                    <div class="contact-details">
+                        <div class="contact-detail-item">
+                            <div class="contact-detail-icon">📍</div>
+                            <div>
+                                <strong>Address</strong>
+                                <p>England Bradford 48 Forster Ct</p>
+                            </div>
+                        </div>
+                        <div class="contact-detail-item">
+                            <div class="contact-detail-icon">📞</div>
+                            <div>
+                                <strong>Phone</strong>
+                                <p>+44 7674946263</p>
+                            </div>
+                        </div>
+                        <div class="contact-detail-item">
+                            <div class="contact-detail-icon">📧</div>
+                            <div>
+                                <strong>Email</strong>
+                                <p>info@81dgital-ex-financial.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-detail-item">
+                            <div class="contact-detail-icon">⏰</div>
+                            <div>
+                                <strong>Business Hours</strong>
+                                <p>Monday - Friday, 09:00 - 18:00 GMT</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <input type="text" placeholder="Your Name" required>
+                        <input type="email" placeholder="Your Email" required>
+                        <input type="text" placeholder="Subject" required>
+                        <textarea placeholder="Your Message" required></textarea>
+                        <button type="submit" class="btn submit-btn">Send Message</button>
+                        <div class="success-msg" id="successMsg">Submitted successfully! We will contact you soon.</div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- FAQ 模块 -->
+            <div class="faq-section">
+                <h3 class="section-subtitle">Frequently Asked Questions</h3>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What types of clients do you work with?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        We work with a diverse range of clients including individual investors, high-net-worth individuals, small and medium-sized enterprises, corporations, and institutional investors. Our services are scalable to meet the needs of both private clients and large organizations.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How much do your consulting services cost?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Our pricing is tailored to the specific services required and the complexity of your needs. We offer hourly rates, project-based fees, and retainer packages for ongoing consulting. We provide transparent pricing with no hidden fees, and offer a free initial consultation to discuss your needs and provide a customized quote.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How quickly can I expect a response to my inquiry?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        We aim to respond to all inquiries within 24 business hours. For urgent matters, you can call our direct line for immediate assistance during business hours. Virtual consultations can typically be scheduled within 2-3 business days of your request.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Do you offer services for international clients?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, we serve clients in over 20 countries worldwide. We offer multilingual support (English, Spanish, French, German, and Mandarin) and have expertise in international financial regulations, cross-border investments, and global market analysis. Our virtual consultation platform allows us to work with clients anywhere in the world.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="javascript:;" class="footer-link nav-item" data-page="home">Home</a>
+                <a href="javascript:;" class="footer-link nav-item" data-page="about">About Us</a>
+                <a href="javascript:;" class="footer-link nav-item" data-page="services">Services</a>
+                <a href="javascript:;" class="footer-link nav-item" data-page="contact">Contact Us</a>
+            </div>
+            <p>© 2026 81dgital-ex Financial Information Consultancy. All Rights Reserved.</p>
+            <p class="copyright">Registered in England and Wales | FCA Regulated | Privacy Policy | Terms of Service</p>
+        </div>
+    </footer>
+
+    <script>
+        // 页面切换
+        const navItems = document.querySelectorAll('.nav-item');
+        const pageSections = document.querySelectorAll('.page-section');
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        // 移动端菜单展开/收起
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+        });
+
+        // 导航切换页面
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // 清除激活状态
+                navItems.forEach(nav => nav.classList.remove('active'));
+                pageSections.forEach(page => page.classList.remove('active'));
+                // 添加当前激活
+                item.classList.add('active');
+                const targetPage = item.getAttribute('data-page');
+                document.getElementById(targetPage).classList.add('active');
+                // 关闭移动端菜单 & 滚动到顶部
+                mobileMenu.classList.remove('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // 表单提交模拟成功
+        const contactForm = document.getElementById('contactForm');
+        const successMsg = document.getElementById('successMsg');
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            successMsg.style.display = 'block';
+            contactForm.reset();
+            // 3秒后隐藏提示
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 3000);
+        });
+
+        // FAQ 交互
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const toggle = question.querySelector('.faq-toggle');
+                
+                answer.classList.toggle('show');
+                toggle.classList.toggle('rotate');
+                toggle.textContent = answer.classList.contains('show') ? '-' : '+';
+            });
+        });
+    </script>
+</body>
+</html>
